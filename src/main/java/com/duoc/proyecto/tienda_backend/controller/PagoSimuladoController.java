@@ -56,6 +56,11 @@ public class PagoSimuladoController {
             Optional<Product> prodOpt = productRepository.findById(pc.getId());
             if (prodOpt.isEmpty()) continue;
             Product prod = prodOpt.get();
+            // Descontar stock
+            int nuevoStock = prod.getStock() - pc.getCantidad();
+            if (nuevoStock < 0) nuevoStock = 0;
+            prod.setStock(nuevoStock);
+            productRepository.save(prod);
             DetalleBoleta detalle = new DetalleBoleta();
             detalle.setBoleta(boleta);
             detalle.setProducto(prod);
